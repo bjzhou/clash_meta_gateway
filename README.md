@@ -14,9 +14,10 @@ systemctl restart systemd-resolved.service
 
 ```
 docker run -d \
-  --name clash_meta_gateway \
+  --name=clash_meta_gateway \
   --privileged \
   --network=host \
+  --restart=always \
   -e SUBS_URL="你的Clash订阅地址" \
   bjzhou1990/clash_meta_gateway:latest
 ```
