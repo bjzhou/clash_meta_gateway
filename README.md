@@ -26,7 +26,8 @@ docker run -d \
 * 网关地址：`宿主机IP`
 * DNS服务器地址：`宿主机IP`
 
-内置配置文件路径为`/data/config.yaml`， 有需要可以自行修改
+为保证功能完整性，配置文件由`clash_meta_gateway`完全接管，服务器订阅通过Proxy Provider的方式提供，默认1小时更新依次，也可以在管理面板手动更新。
+内置配置文件路径为`/data/config.yaml`，有需要可以自行修改
 
 ### 已知问题:
 
