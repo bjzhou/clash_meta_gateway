@@ -1,0 +1,108 @@
+mode: rule
+ipv6: false
+log-level: info
+allow-lan: true
+mixed-port: 7890
+redir-port: 7892
+tproxy-port: 7894
+unified-delay: false
+tcp-concurrent: true
+external-controller: 0.0.0.0:9090
+external-ui: /data/ui
+
+geodata-mode: true
+geox-url:
+  geoip: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
+  geosite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
+  mmdb: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+iptables:
+  enable: true
+  inbound-interface: eth0
+routing-mark: 1
+interface-name: eth0
+
+sniffer:
+  enable: true
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+  skip-domain:
+    - Mijia Cloud
+    - 'dlg.io.mi.com'
+    - '+.apple.com'
+
+proxy-providers:
+  SUBS:
+    type: http
+    interval: 3600
+    health-check: {enable: true, url: https://www.gstatic.com/generate_204, interval: 300}
+    path: "./subs.yaml"
+    url: "SUBS_URL_PLACEHOLDER"
+
+rule-providers:
+  direct:
+    type: file
+    behavior: classical
+    path: "./direct.yaml"
+
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  ipv6: false
+  enhanced-mode: redir-host 
+  prefer-h3: true
+  nameserver:
+   - https://dns.cloudflare.com/dns-query
+   - tls://8.8.8.8:853
+   - tls://1.1.1.1:853
+  nameserver-policy:
+    "rule-set:direct":
+      - https://dns.alidns.com/dns-query
+      - 119.29.29.29
+      - 223.5.5.5
+  default-nameserver:
+   - 223.5.5.5
+
+
+proxy-groups:
+  - {name: 默认, type: select, proxies: [DIRECT, 手动选择, 自动回退, 自动选择, 香港, 台湾, 日本, 美国, 新加坡, 其它地区]}
+
+  - {name: NETFLIX, type: select, proxies: [默认], use: [SUBS]}
+
+  - {name: AI服务, type: select, proxies: [默认], use: [SUBS]}
+
+  - {name: 非常用端口, type: select, proxies: [默认, DIRECT], use: [SUBS]}
+
+  - {name: 手动选择, type: select, use: [SUBS]}
+  - {name: 自动回退, type: fallback, use: [SUBS], url: 'https://www.gstatic.com/generate_204', interval: 300}
+  - {name: 自动选择, type: url-test, use: [SUBS], tolerance: 20}
+
+  - {name: 香港, type: select, use: [SUBS], filter: "(?i)港|hk|hongkong|hong kong"}
+
+  - {name: 台湾, type: select, use: [SUBS], filter: "(?i)台|tw|taiwan"}
+
+  - {name: 日本, type: select, use: [SUBS], filter: "(?i)日本|jp|japan"}
+
+  - {name: 美国, type: select, use: [SUBS], filter: "(?i)美|us|unitedstates|united states"}
+
+  - {name: 新加坡, type: select, use: [SUBS], filter: "(?i)(新|sg|singapore)"}
+
+  - {name: 其它地区, type: select, use: [SUBS], filter: "(?i)^(?!.*(?:🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|新|sg|singapore|美|us|unitedstates)).*"}
+
+
+rules:
+  - RULE-SET,direct,DIRECT
+  - GEOSITE,netflix,NETFLIX
+  - GEOSITE,openai,AI服务
+  - GEOSITE,anthropic,AI服务
+  - NOT,((DST-PORT,80/8080/443/8443)),非常用端口
+
+  - MATCH,默认
