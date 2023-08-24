@@ -30,6 +30,10 @@ docker run -d \
 为保证功能完整性，配置文件由`clash_meta_gateway`完全接管，服务器订阅通过Proxy Provider的方式提供，默认1小时更新依次，也可以在管理面板手动更新。
 内置配置文件路径为`/data/config.yaml`，有需要可以自行修改
 
-### 已知问题:
+### 停用
 
-* docker启动后再关闭会导致宿主机无法上网，重启可解决
+如果你打算停用，请先执行以下命令再停止或删除容器
+
+```
+docker exec clash_meta_gateway iptables-clear
+```
