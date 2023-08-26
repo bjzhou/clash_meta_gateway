@@ -20,9 +20,9 @@ useradd -r -s /bin/false clash
 mkdir -p /opt/clash
 cd /opt/clash
 wget -O master.zip https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/archive/refs/heads/master.zip
-mkdir git_temp && unzip master.zip -d git_temp
-mv git_temp/rootfs/* .
-rm -rf git_temp
+unzip master.zip -d .
+mv clash_meta_gateway-master/rootfs/* .
+rm -rf clash_meta_gateway-master
 echo "[Unit]
 Description=Clash-Meta Daemon, Another Clash Kernel.
 After=network.target NetworkManager.service systemd-networkd.service iwd.service
