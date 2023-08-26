@@ -15,22 +15,19 @@ then
 fi
 
 
-useradd -r -s /bin/false clash
-
 mkdir -p /opt/clash
 cd /opt/clash
 wget -O master.zip https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/archive/refs/heads/master.zip
 unzip master.zip -d .
 mv clash_meta_gateway-master/rootfs/* .
 rm -rf clash_meta_gateway-master
+chmod +x usr/bin/clash
 echo "[Unit]
 Description=Clash-Meta Daemon, Another Clash Kernel.
 After=network.target NetworkManager.service systemd-networkd.service iwd.service
 
 [Service]
 Type=simple
-User=clash
-Group=clash
 LimitNPROC=500
 LimitNOFILE=1000000
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BIND_SERVICE
