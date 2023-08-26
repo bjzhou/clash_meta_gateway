@@ -3,12 +3,10 @@ ipv6: false
 log-level: info
 allow-lan: true
 mixed-port: 7890
-redir-port: 7892
-tproxy-port: 7894
 unified-delay: false
 tcp-concurrent: true
 external-controller: 0.0.0.0:9090
-external-ui: /data/ui
+external-ui: ./ui
 
 geodata-mode: true
 geox-url:
@@ -20,11 +18,15 @@ profile:
   store-selected: true
   store-fake-ip: true
 
-iptables:
-  enable: true
-  inbound-interface: eth0
 routing-mark: 1
-interface-name: eth0
+
+tun:
+  enable: true
+  stack: system
+  auto-route: true
+  auto-detect-interface: true
+  dns-hijack:
+    - any:53
 
 sniffer:
   enable: true
@@ -57,7 +59,10 @@ dns:
   enable: true
   listen: 0.0.0.0:53
   ipv6: false
-  enhanced-mode: redir-host 
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - '*.lan'
   prefer-h3: true
   nameserver:
    - https://dns.cloudflare.com/dns-query
