@@ -49,7 +49,7 @@ sysctl -p
 
 if [[ "$1" ]]
 then
-    SUBS_URL=${$1//&/\\&}
+    SUBS_URL=${1//&/\\&}
     if [ -e .last_subs_url ]
     then
         lastSubsUrl=`cat .last_subs_url`
