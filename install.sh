@@ -21,6 +21,7 @@ wget -O master.zip https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/archive/r
 unzip master.zip -d .
 mv clash_meta_gateway-master/rootfs/* .
 rm -rf clash_meta_gateway-master
+rm -rf master.zip
 chmod +x usr/bin/clash
 echo "[Unit]
 Description=Clash-Meta Daemon, Another Clash Kernel.
