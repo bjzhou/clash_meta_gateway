@@ -42,7 +42,6 @@ systemctl disable clash.service
 systemctl stop clash.service
 rm -rf /etc/systemd/system/clash.service
 rm -rf /opt/clash
-userdel clash
 ```
 
 
