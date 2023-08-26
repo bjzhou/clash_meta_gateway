@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-for p in git wget; do 
+for p in unzip wget; do 
     if ! hash "$p" &>/dev/null
     then
-        echo "$p is not installed, please install git wget"
+        echo "$p is not installed, please install unzip wget"
         exit
     fi
 done
@@ -19,7 +19,8 @@ useradd -r -s /bin/false clash
 
 mkdir -p /opt/clash
 cd /opt/clash
-git clone --depth 1 https://github.com/bjzhou/clash_meta_gateway git_temp
+wget -O master.zip https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/archive/refs/heads/master.zip
+mkdir git_temp && unzip master.zip -d git_temp
 mv git_temp/rootfs/* .
 rm -rf git_temp
 echo "[Unit]
@@ -48,7 +49,7 @@ sysctl -p
 
 if [[ "$1" ]]
 then
-    SUBS_URL=${1//&/\\&}
+    SUBS_URL=${$1//&/\\&}
     if [ -e .last_subs_url ]
     then
         lastSubsUrl=`cat .last_subs_url`
