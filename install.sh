@@ -1,17 +1,11 @@
 #!/usr/bin/env bash
 
-for p in unzip wget; do 
-    if ! hash "$p" &>/dev/null
-    then
-        echo "$p is not installed, please install unzip wget"
-        exit
-    fi
-done
-
+opkg update
+opkg install unzip kmod-tun
 
 mkdir -p /opt/clash
 cd /opt/clash
-wget -O openwrt.zip https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/archive/refs/heads/openwrt.zip
+curl -L https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/archive/refs/heads/openwrt.zip -o openwrt.zip
 unzip openwrt.zip -d .
 mv clash_meta_gateway-openwrt/rootfs/etc/init.d/clash /etc/init.d/
 mv clash_meta_gateway-openwrt/rootfs/opt/clash/* .

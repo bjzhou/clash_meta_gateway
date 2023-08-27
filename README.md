@@ -2,12 +2,8 @@
 
 Clash Meta TUN for OpenWRT
 
-安装脚本：
-```
-sh -c "$(curl -L https://github.com/bjzhou/clash_meta_gateway/raw/openwrt/install.sh)" @ 你的订阅地址
-```
 
-私人Github镜像
+安装脚本：
 ```
 sh -c "$(curl -L https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/raw/openwrt/install.sh)" @ 你的订阅地址
 ```
@@ -15,7 +11,7 @@ sh -c "$(curl -L https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/raw/openwrt
 卸载：
 ```
 /etc/init.d/clash stop
-rm -rf //etc/init.d/clash
+rm -rf /etc/init.d/clash
 rm -rf /opt/clash
 ```
 
