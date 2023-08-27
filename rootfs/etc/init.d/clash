@@ -12,10 +12,39 @@ start_service() {
         procd_close_instance
 
         uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#7874'
+        uci set dhcp.@dnsmasq[0].cachesize='0'
+
+        uci set network.clash=interface
+        uci set network.clash.proto='static'
+        uci set network.clash.device='Meta'
+        uci set network.clash.ipaddr='198.18.0.1'
+        uci set network.clash.defaultroute='0'
+
+        zone_name=`uci get firewall.@zone[0].name`
+        if [ "$zone_name" = "lan" ]; then
+            uci add_list firewall.@zone[0].network='clash'
+        fi
+        
         uci commit
+
+        /etc/init.d/firewall restart
+        /etc/init.d/network restart
+        /etc/init.d/dnsmasq restart
 }
 
 stop_service() {
-        uci delete dhcp.@dnsmasq[0].server
+        uci del dhcp.@dnsmasq[0].server
+        uci set dhcp.@dnsmasq[0].cachesize='1000'
+        uci del network.clash
+        
+        zone_name=`uci get firewall.@zone[0].name`
+        if [ "$zone_name" = "lan" ]; then
+            uci del_list firewall.@zone[0].network='clash'
+        fi
+        
         uci commit
+
+        /etc/init.d/firewall restart
+        /etc/init.d/network restart
+        /etc/init.d/dnsmasq restart
 }
