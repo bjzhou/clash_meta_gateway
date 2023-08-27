@@ -18,15 +18,9 @@ profile:
   store-selected: true
   store-fake-ip: true
 
-routing-mark: 1
-
 tun:
   enable: true
   stack: system
-  auto-route: true
-  auto-detect-interface: true
-  dns-hijack:
-    - any:53
 
 sniffer:
   enable: true
@@ -57,7 +51,7 @@ rule-providers:
 
 dns:
   enable: true
-  listen: 0.0.0.0:53
+  listen: 0.0.0.0:7874
   ipv6: false
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16

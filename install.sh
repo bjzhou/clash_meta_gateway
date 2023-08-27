@@ -8,62 +8,24 @@ for p in unzip wget; do
     fi
 done
 
-if [[ $EUID -ne 0 ]]
-then
-    echo "please run as root"
-    exit
-fi
-
 
 mkdir -p /opt/clash
 cd /opt/clash
-wget -O master.zip https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/archive/refs/heads/master.zip
-unzip master.zip -d .
-mv clash_meta_gateway-master/rootfs/* .
-rm -rf clash_meta_gateway-master
-rm -rf master.zip
-chmod +x usr/bin/clash
-echo "[Unit]
-Description=Clash-Meta Daemon, Another Clash Kernel.
-After=network.target NetworkManager.service systemd-networkd.service iwd.service
-
-[Service]
-Type=simple
-LimitNPROC=500
-LimitNOFILE=1000000
-CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BIND_SERVICE
-AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BIND_SERVICE
-Restart=always
-ExecStartPre=/usr/bin/sleep 1s
-ExecStart=/opt/clash/usr/bin/clash -d /opt/clash/data
-
-[Install]
-WantedBy=multi-user.target
-" > /etc/systemd/system/clash.service
-
-
-echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
-sysctl -p
+wget -O openwrt.zip https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/archive/refs/heads/openwrt.zip
+unzip openwrt.zip -d .
+mv clash_meta_gateway-openwrt/rootfs/* /
+rm -rf clash_meta_gateway-openwrt
+rm -rf openwrt.zip
+chmod +x /opt/clash/bin/clash
 
 if [[ "$1" ]]
 then
     SUBS_URL=${1//&/\\&}
-    if [ -e .last_subs_url ]
-    then
-        lastSubsUrl=`cat .last_subs_url`
-        if [ "$lastSubsUrl" != "$SUBS_URL" ]
-        then
-            sed -i "s|${lastSubsUrl}|${SUBS_URL}|g" /opt/clash/data/config.yaml
-            echo ${SUBS_URL} > .last_subs_url
-        fi
-    else
-        sed -i "s|SUBS_URL_PLACEHOLDER|${SUBS_URL}|g" /opt/clash/data/config.yaml
-        echo ${SUBS_URL} > .last_subs_url
-    fi
+    sed -i "s|SUBS_URL_PLACEHOLDER|${SUBS_URL}|g" /opt/clash/config.yaml
 else
-    echo "modify /opt/clash/data/config.yaml to add subs url then run command 'systemctl restart clash'"
+    echo "modify /opt/clash/config.yaml to add subs url then run command '/etc/init.d/clash restart'"
 fi
 
 
-systemctl enable clash.service
-systemctl start clash.service
+/etc/init.d/clash enable
+/etc/init.d/clash start
