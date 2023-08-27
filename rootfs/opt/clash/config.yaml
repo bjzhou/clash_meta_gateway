@@ -18,6 +18,8 @@ profile:
   store-selected: true
   store-fake-ip: true
 
+find-process-mode: off
+
 tun:
   enable: true
   stack: system
