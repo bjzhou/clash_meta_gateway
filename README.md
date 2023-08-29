@@ -2,6 +2,8 @@
 
 Clash Meta TUN for OpenWRT
 
+支持官方原版OpenWRT直接安装，仅依赖kmod-tun
+
 
 安装脚本：
 ```
