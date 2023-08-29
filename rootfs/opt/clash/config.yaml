@@ -82,6 +82,8 @@ proxy-groups:
 
   - {name: NETFLIX, type: select, proxies: [默认], use: [SUBS]}
 
+  - {name: 海外游戏, type: select, proxies: [默认], use: [SUBS]}
+
   - {name: AI服务, type: select, proxies: [默认], use: [SUBS]}
 
   - {name: 非常用端口, type: select, proxies: [默认, DIRECT], use: [SUBS]}
@@ -106,6 +108,7 @@ proxy-groups:
 rules:
   - RULE-SET,direct,DIRECT
   - GEOSITE,netflix,NETFLIX
+  - GEOSITE,category-games,海外游戏
   - GEOSITE,openai,AI服务
   - GEOSITE,anthropic,AI服务
   - NOT,((DST-PORT,80/8080/443/8443)),非常用端口
