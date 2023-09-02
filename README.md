@@ -1,8 +1,10 @@
 # clash_meta_gateway
 
-Clash Meta TUN for OpenWRT
+Clash Meta for OpenWRT
 
-支持官方原版OpenWRT直接安装，仅依赖kmod-tun
+支持官方原版OpenWRT直接安装，~~仅依赖kmod-tun~~
+
+由于TUN模式下部分游戏客户端访问异常，且偶尔会出现游戏高ping, 原因未知，新版本由TUN + fakeip模式修改为使用防火墙TPROXY转发，支持新版nftables和旧版iptables(iptables版本未测试)
 
 
 安装脚本：
