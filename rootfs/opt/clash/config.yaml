@@ -3,6 +3,7 @@ ipv6: false
 log-level: info
 allow-lan: true
 mixed-port: 7890
+tproxy-port: 7894
 unified-delay: false
 tcp-concurrent: true
 external-controller: 0.0.0.0:9090
@@ -18,15 +19,17 @@ profile:
   store-selected: true
   store-fake-ip: true
 
+routing-mark: 2
+
 find-process-mode: off
 
-tun:
-  enable: true
-  stack: system
-  auto-route: true
-  auto-detect-interface: true
-  dns-hijack:
-    - any:53
+# tun:
+#   enable: false
+#   stack: system
+#   auto-route: true
+#   auto-detect-interface: true
+#   dns-hijack:
+#     - any:53
 
 sniffer:
   enable: true
@@ -59,10 +62,10 @@ dns:
   enable: true
   listen: 0.0.0.0:7874
   ipv6: false
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  fake-ip-filter:
-    - '*.lan'
+  # enhanced-mode: fake-ip
+  # fake-ip-range: 198.18.0.1/16
+  # fake-ip-filter:
+  #   - '*.lan'
   prefer-h3: true
   nameserver:
    - https://dns.cloudflare.com/dns-query
@@ -80,6 +83,10 @@ dns:
 proxy-groups:
   - {name: 默认, type: select, proxies: [DIRECT, 手动选择, 自动回退, 自动选择, 香港, 台湾, 日本, 美国, 新加坡, 其它地区]}
 
+  - {name: 手动选择, type: select, use: [SUBS]}
+  - {name: 自动回退, type: fallback, use: [SUBS], url: 'https://www.gstatic.com/generate_204', interval: 300}
+  - {name: 自动选择, type: url-test, use: [SUBS], tolerance: 20}
+
   - {name: NETFLIX, type: select, proxies: [默认], use: [SUBS]}
 
   - {name: 海外游戏, type: select, proxies: [默认], use: [SUBS]}
@@ -88,9 +95,6 @@ proxy-groups:
 
   - {name: 非常用端口, type: select, proxies: [默认, DIRECT], use: [SUBS]}
 
-  - {name: 手动选择, type: select, use: [SUBS]}
-  - {name: 自动回退, type: fallback, use: [SUBS], url: 'https://www.gstatic.com/generate_204', interval: 300}
-  - {name: 自动选择, type: url-test, use: [SUBS], tolerance: 20}
 
   - {name: 香港, type: select, use: [SUBS], filter: "(?i)港|hk|hongkong|hong kong"}
 

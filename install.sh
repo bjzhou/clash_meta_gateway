@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
 opkg update
-opkg install unzip kmod-tun
+opkg install unzip
+
+if hash nft; then
+    opkg install kmod-nft-tproxy
+else
+    opkg install iptables-mod-tproxy
+fi
 
 mkdir -p /opt/clash
 cd /opt/clash
@@ -12,6 +18,7 @@ mv clash_meta_gateway-openwrt/rootfs/opt/clash/* .
 rm -rf clash_meta_gateway-openwrt
 rm -rf openwrt.zip
 chmod +x /opt/clash/bin/clash
+chmod +x /opt/clash/bin/clash-rules
 chmod +x /etc/init.d/clash
 
 if [[ "$1" ]]
