@@ -13,6 +13,7 @@ start_service() {
 
         uci add_list dhcp.@dnsmasq[0].server='127.0.0.1#7874'
         uci set dhcp.@dnsmasq[0].cachesize='0'
+        uci set dhcp.@dnsmasq[0].noresolv='1'
         uci commit
 
         /opt/clash/bin/clash-rules start
@@ -22,6 +23,7 @@ start_service() {
 stop_service() {
         uci del dhcp.@dnsmasq[0].server
         uci set dhcp.@dnsmasq[0].cachesize='1000'
+        uci del dhcp.@dnsmasq[0].noresolv
         uci commit
 
         /opt/clash/bin/clash-rules stop
