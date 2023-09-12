@@ -23,14 +23,6 @@ routing-mark: 2
 
 find-process-mode: off
 
-# tun:
-#   enable: false
-#   stack: system
-#   auto-route: true
-#   auto-detect-interface: true
-#   dns-hijack:
-#     - any:53
-
 sniffer:
   enable: true
   sniff:
@@ -62,18 +54,14 @@ dns:
   enable: true
   listen: 0.0.0.0:7874
   ipv6: false
-  # enhanced-mode: fake-ip
-  # fake-ip-range: 198.18.0.1/16
-  # fake-ip-filter:
-  #   - '*.lan'
   prefer-h3: true
   nameserver:
    - https://dns.cloudflare.com/dns-query
-   - tls://8.8.8.8:853
    - tls://1.1.1.1:853
+   - tls://8.8.8.8:853
   nameserver-policy:
     "rule-set:direct":
-      - https://dns.alidns.com/dns-query
+      - https://223.5.5.5/dns-query#h3=true
       - 119.29.29.29
       - 223.5.5.5
   default-nameserver:
@@ -94,6 +82,8 @@ proxy-groups:
   - {name: AI服务, type: select, proxies: [默认], use: [SUBS]}
 
   - {name: 非常用端口, type: select, proxies: [默认, DIRECT], use: [SUBS]}
+
+  - {name: UDP流量, type: select, proxies: [默认, DIRECT], use: [SUBS]}
 
 
   - {name: 香港, type: select, use: [SUBS], filter: "(?i)港|hk|hongkong|hong kong"}
@@ -116,5 +106,6 @@ rules:
   - GEOSITE,openai,AI服务
   - GEOSITE,anthropic,AI服务
   - NOT,((DST-PORT,80/8080/443/8443)),非常用端口
+  - AND,((NOT,((DST-PORT,80/443))),(NETWORK,UDP)),UDP流量
 
   - MATCH,默认
