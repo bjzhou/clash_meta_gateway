@@ -29,3 +29,8 @@ stop_service() {
         /opt/clash/bin/clash-rules stop
         /etc/init.d/dnsmasq restart
 }
+
+boot() {
+        sleep 10
+        start
+}
