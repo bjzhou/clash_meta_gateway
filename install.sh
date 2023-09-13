@@ -11,7 +11,7 @@ fi
 
 mkdir -p /opt/clash
 cd /opt/clash
-curl -L https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/archive/refs/heads/openwrt.zip -o openwrt.zip
+curl -L https://ghproxy.com/https://github.com/bjzhou/clash_meta_gateway/archive/refs/heads/openwrt.zip -o openwrt.zip
 unzip openwrt.zip -d .
 mv clash_meta_gateway-openwrt/rootfs/etc/init.d/clash /etc/init.d/
 mv clash_meta_gateway-openwrt/rootfs/opt/clash/* .
