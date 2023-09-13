@@ -2,14 +2,14 @@
 
 Clash Meta for OpenWRT
 
-支持官方原版OpenWRT直接安装，~~仅依赖kmod-tun~~
+支持官方原版OpenWRT直接安装
 
 由于TUN模式下部分游戏客户端访问异常，且偶尔会出现游戏高ping, 原因未知，新版本由TUN + fakeip模式修改为使用防火墙TPROXY转发，支持新版nftables和旧版iptables(iptables版本未测试)
 
 
 安装脚本：
 ```
-sh -c "$(curl -L https://cdn-gh.hinnka.com/bjzhou/clash_meta_gateway/raw/openwrt/install.sh)" @ 你的订阅地址
+sh -c "$(curl -L  https://ghproxy.com/https://github.com/bjzhou/clash_meta_gateway/raw/openwrt/install.sh)" @ 你的订阅地址
 ```
 
 卸载：
