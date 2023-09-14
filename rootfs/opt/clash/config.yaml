@@ -105,7 +105,7 @@ rules:
   - GEOSITE,category-games,海外游戏
   - GEOSITE,openai,AI服务
   - GEOSITE,anthropic,AI服务
-  - NOT,((DST-PORT,80/8080/443/8443)),非常用端口
   - AND,((NOT,((DST-PORT,80/443))),(NETWORK,UDP)),UDP流量
+  - NOT,((DST-PORT,80/8080/443/8443)),非常用端口
 
   - MATCH,默认
