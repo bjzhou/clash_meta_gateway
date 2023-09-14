@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-opkg update
+#opkg update
 opkg install unzip
 
 if hash nft; then
