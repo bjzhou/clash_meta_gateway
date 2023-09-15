@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
-ulimit -n 1000000
+#ulimit -n 1000000
 sysctl -w "net.ipv4.ip_forward=1"
-sysctl -w "fs.file-max=1000000"
+#sysctl -w "fs.file-max=1000000"
 
 SUBS_URL=${SUBS_URL//&/\\&}
 

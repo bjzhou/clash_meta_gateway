@@ -18,7 +18,9 @@ profile:
   store-selected: true
   store-fake-ip: true
 
-routing-mark: 1
+routing-mark: 2
+
+find-process-mode: off
 
 tun:
   enable: true
@@ -66,11 +68,11 @@ dns:
   prefer-h3: true
   nameserver:
    - https://dns.cloudflare.com/dns-query
-   - tls://8.8.8.8:853
-   - tls://1.1.1.1:853
+   - tls://1.0.0.1:853
+   - tls://8.8.4.4:853
   nameserver-policy:
     "rule-set:direct":
-      - https://dns.alidns.com/dns-query
+      - https://223.5.5.5/dns-query#h3=true
       - 119.29.29.29
       - 223.5.5.5
   default-nameserver:
@@ -80,15 +82,20 @@ dns:
 proxy-groups:
   - {name: 默认, type: select, proxies: [DIRECT, 手动选择, 自动回退, 自动选择, 香港, 台湾, 日本, 美国, 新加坡, 其它地区]}
 
+  - {name: 手动选择, type: select, use: [SUBS]}
+  - {name: 自动回退, type: fallback, use: [SUBS], url: 'https://www.gstatic.com/generate_204', interval: 300}
+  - {name: 自动选择, type: url-test, use: [SUBS], tolerance: 20}
+
   - {name: NETFLIX, type: select, proxies: [默认], use: [SUBS]}
+
+  - {name: 海外游戏, type: select, proxies: [默认], use: [SUBS]}
 
   - {name: AI服务, type: select, proxies: [默认], use: [SUBS]}
 
   - {name: 非常用端口, type: select, proxies: [默认, DIRECT], use: [SUBS]}
 
-  - {name: 手动选择, type: select, use: [SUBS]}
-  - {name: 自动回退, type: fallback, use: [SUBS], url: 'https://www.gstatic.com/generate_204', interval: 300}
-  - {name: 自动选择, type: url-test, use: [SUBS], tolerance: 20}
+  - {name: UDP流量, type: select, proxies: [默认, DIRECT], use: [SUBS]}
+
 
   - {name: 香港, type: select, use: [SUBS], filter: "(?i)港|hk|hongkong|hong kong"}
 
@@ -106,8 +113,10 @@ proxy-groups:
 rules:
   - RULE-SET,direct,DIRECT
   - GEOSITE,netflix,NETFLIX
+  - GEOSITE,category-games,海外游戏
   - GEOSITE,openai,AI服务
   - GEOSITE,anthropic,AI服务
+  - AND,((NOT,((DST-PORT,80/443))),(NETWORK,UDP)),UDP流量
   - NOT,((DST-PORT,80/8080/443/8443)),非常用端口
 
   - MATCH,默认
