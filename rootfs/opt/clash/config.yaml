@@ -49,6 +49,10 @@ rule-providers:
     type: file
     behavior: classical
     path: "./direct.yaml"
+  steam_cn:
+    type: file
+    behavior: classical
+    path: "./steam_cn.yaml"
 
 dns:
   enable: true
@@ -60,7 +64,7 @@ dns:
    - tls://1.1.1.1:853
    - tls://8.8.8.8:853
   nameserver-policy:
-    "rule-set:direct":
+    "rule-set:direct,steam_cn":
       - https://223.5.5.5/dns-query#h3=true
       - 119.29.29.29
       - 223.5.5.5
@@ -100,7 +104,10 @@ proxy-groups:
 
 
 rules:
+  - DOMAIN,store.steampowered.com,海外游戏
+  - DOMAIN-SUFFIX,steamcommunity.com,海外游戏
   - RULE-SET,direct,DIRECT
+  - RULE-SET,steam_cn,DIRECT
   - GEOSITE,netflix,NETFLIX
   - GEOSITE,category-games,海外游戏
   - GEOSITE,openai,AI服务
